@@ -1,10 +1,10 @@
 #include <torch/torch.h>
 
-template <typename Dataloader>
+template <typename Trainloader,typename Validloader>
 void trainer(torch::jit::script::Module net,
              torch::nn::Linear lin,
-             Dataloader &train_loader,
-             Dataloader &valid_loader,
+             Trainloader &train_loader,
+             Validloader &valid_loader,
              torch::optim::Optimizer &optimizer,
              size_t dataset_size) {
     float valid_loss = 0.0;
