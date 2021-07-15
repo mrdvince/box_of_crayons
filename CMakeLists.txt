@@ -11,11 +11,9 @@ find_package(OpenCV REQUIRED PATHS)
 
 add_executable(${EXECUTABLE_NAME})
 target_sources(${EXECUTABLE_NAME} PRIVATE main.cpp
-                                          src/model.cpp
-                                          src/trainer.cpp
-                                          src/dataset.cpp
+                                          include/trainer.tpp
                                           include/trainer.h
-                                          include/model.h
+                                          src/dataset.cpp
                                           include/dataset.h
 )
 
