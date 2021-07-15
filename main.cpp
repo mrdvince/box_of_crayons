@@ -66,11 +66,12 @@ int main(int argc, const char *argv[]) {
     torch::Device device(torch::cuda::is_available() ? torch::kCUDA : torch::kCPU);
     std::cout << device << std::endl;
     
-    torch::nn::Linear linear(512, 24);
+    torch::nn::Linear linear(2048, 24);
     torch::optim::Adam optimizer(linear->parameters(), torch::optim::AdamOptions(0.001));
     module.to(device);
+    linear->to(device);
 
-    float train_size = train_dataset.size().value();
+    size_t train_size = train_dataset.size().value();
 
     trainer(module, linear, train_loader, valid_loader, optimizer, train_size);
 }
