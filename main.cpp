@@ -41,7 +41,7 @@ int main(int argc, const char *argv[]) {
     auto train_dataset = CDataset(list_train_images, list_train_labels)
                              .map(torch::data::transforms::Normalize<>({0.485, 0.456, 0.406}, {0.229, 0.224, 0.225}))
                              .map(torch::data::transforms::Stack<>());
-    auto train_loader = torch::data::make_data_loader<torch::data::samplers::RandomSampler>(std::move(train_dataset), 4);
+    auto train_loader = torch::data::make_data_loader<torch::data::samplers::RandomSampler>(std::move(train_dataset), 64);
 
     // validation
     std::pair<std::vector<std::string>, std::vector<int>> valid_images_labels = load_data_from_folder(val_folder_images);
@@ -53,11 +53,11 @@ int main(int argc, const char *argv[]) {
                              .map(torch::data::transforms::Normalize<>({0.485, 0.456, 0.406}, {0.229, 0.224, 0.225}))
                              .map(torch::data::transforms::Stack<>());
 
-    auto valid_loader = torch::data::make_data_loader<torch::data::samplers::SequentialSampler>(std::move(valid_dataset), 4);
+    auto valid_loader = torch::data::make_data_loader<torch::data::samplers::SequentialSampler>(std::move(valid_dataset), 64);
 
     torch::jit::script::Module module;
     if (argc == 1) {
-        module = torch::jit::load("resnet18_without_last_layer.pt");
+        module = torch::jit::load("resnet50_without_last_layer.pt");
 
     } else {
         module = torch::jit::load(argv[1]);
