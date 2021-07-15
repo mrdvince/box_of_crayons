@@ -23,7 +23,6 @@ std::vector<std::string> get_image_folders(std::string path) {
     return folder_names;
 };
 
-
 int main(int argc, const char *argv[]) {
     // load dataset
     std::string DATA_DIR = "/home/vinc3/Projects/box_of_crayons/data/";
@@ -64,12 +63,9 @@ int main(int argc, const char *argv[]) {
         module = torch::jit::load(argv[1]);
     }
 
-    torch::Device device = torch::kCPU;
-    std::cout << "CUDA DEVICE COUNT: " << torch::cuda::device_count() << std::endl;
-    if (torch::cuda::is_available()) {
-        std::cout << "CUDA is available! Training on GPU." << std::endl;
-        device = torch::kCUDA;
-    }
+    torch::Device device(torch::cuda::is_available() ? torch::kCUDA : torch::kCPU);
+    std::cout << device << std::endl;
+    
     torch::nn::Linear linear(512, 24);
     torch::optim::Adam optimizer(linear->parameters(), torch::optim::AdamOptions(0.001));
     module.to(device);
