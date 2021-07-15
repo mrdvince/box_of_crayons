@@ -1,10 +1,10 @@
-#include "trainer.h"
+#include <torch/torch.h>
 
-template <typename Trainloader, typename Validloader>
+template <typename Dataloader>
 void trainer(torch::jit::script::Module net,
              torch::nn::Linear lin,
-             Trainloader &data_loader,
-             Validloader &valid_loader,
+             Dataloader &train_loader,
+             Dataloader &valid_loader,
              torch::optim::Optimizer &optimizer,
              size_t dataset_size) {
     float valid_loss = 0.0;
@@ -12,7 +12,7 @@ void trainer(torch::jit::script::Module net,
     float train_loss = 0.0;
 
     for (int i = 0; i < 25; i++) {
-        for (auto &batch : *data_loader) {
+        for (auto &batch : *train_loader) {
             auto data = batch.data;
             auto target = batch.target.squeeze();
             data = data.to(torch::kF32);
