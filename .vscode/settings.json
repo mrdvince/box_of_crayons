@@ -70,7 +70,9 @@
         "typeinfo": "cpp",
         "valarray": "cpp",
         "variant": "cpp",
-        "*.tpp": "cpp"
+        "*.tpp": "cpp",
+        "__nullptr": "cpp"
     },
-    "cmake.configureOnOpen": false
+    "cmake.configureOnOpen": false,
+    "cmake.sourceDirectory": "${workspaceFolder}/trainer"
 }

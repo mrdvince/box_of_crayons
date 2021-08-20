@@ -16,7 +16,7 @@ std::vector<std::string> get_image_folders(std::string path) {
     while ((ent = readdir(dir)) != NULL) {
         if (strcmp(ent->d_name, ".") != 0 && strcmp(ent->d_name, "..") != 0) {
             folder_names.push_back(path + "/" + ent->d_name);
-            // std::cout << (ent->d_name) << "\n";
+            std::cout << (ent->d_name) << "\n";
         }
     }
     closedir(dir);
@@ -25,9 +25,9 @@ std::vector<std::string> get_image_folders(std::string path) {
 
 int main(int argc, const char *argv[]) {
     // load dataset
-    std::string DATA_DIR = "/home/vinc3/Projects/box_of_crayons/data/";
-    std::string TRAIN_DIR = DATA_DIR + "/train";
-    std::string VAL_DIR = DATA_DIR + "/val";
+    std::string DATA_DIR = "/data/dc/dog-and-cat";
+    std::string TRAIN_DIR = DATA_DIR + "/training_set";
+    std::string VAL_DIR = DATA_DIR + "/test_set";
 
     std::vector<std::string> train_folder_images = get_image_folders(TRAIN_DIR);
     std::vector<std::string> val_folder_images = get_image_folders(VAL_DIR);
@@ -66,7 +66,7 @@ int main(int argc, const char *argv[]) {
     torch::Device device(torch::cuda::is_available() ? torch::kCUDA : torch::kCPU);
     std::cout << device << std::endl;
     
-    torch::nn::Linear linear(2048, 24);
+    torch::nn::Linear linear(2048, 2);
     torch::optim::Adam optimizer(linear->parameters(), torch::optim::AdamOptions(0.001));
     module.to(device);
     linear->to(device);

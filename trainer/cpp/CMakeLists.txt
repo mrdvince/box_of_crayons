@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 project(plants VERSION 1.0.0 LANGUAGES CXX)
 
 set(EXECUTABLE_NAME plants)
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 find_package(Torch REQUIRED PATHS ~/libtorch)
 find_package(OpenCV REQUIRED PATHS)
