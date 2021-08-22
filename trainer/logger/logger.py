@@ -23,3 +23,13 @@ def setup_logging(
         logging.config.dictConfig(config)
     else:
         logging.basicConfig(level=default_level)
+
+
+def get_logger(name, verbosity=2):
+    log_levels = {0: logging.WARNING, 1: logging.INFO, 2: logging.DEBUG}
+    assert (
+        verbosity in log_levels
+    ), f"Verbosity option {verbosity} is invalid. Valid options are {log_levels}"
+    logger = logging.getLogger(name)
+    logger.setLevel(log_levels[verbosity])
+    return logger
