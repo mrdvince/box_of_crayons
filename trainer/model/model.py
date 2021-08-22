@@ -15,4 +15,5 @@ def model(num_classes=24):
         nn.Linear(hidden_sizes[1], num_classes),
         nn.LogSoftmax(dim=1),
     )
+
     return model_tl
