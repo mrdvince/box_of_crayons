@@ -20,7 +20,7 @@ class BaseDataLoader(DataLoader):
         self.init_kwargs = {
             "dataset": dataset,
             "batch_size": batch_size,
-            "shuffle": shuffle,
+            "shuffle": self.shuffle,
             "num_workers": num_workers,
         }
 
