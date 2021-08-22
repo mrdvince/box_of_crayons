@@ -13,9 +13,6 @@ def model(num_classes=24):
         nn.Linear(hidden_sizes[0], hidden_sizes[1]),
         nn.ReLU(),
         nn.Linear(hidden_sizes[1], num_classes),
-        nn.Softmax(dim=1),
+        nn.LogSoftmax(dim=1),
     )
     return model_tl
-
-
-print(model())
