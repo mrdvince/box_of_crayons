@@ -74,5 +74,12 @@
         "__nullptr": "cpp"
     },
     "cmake.configureOnOpen": false,
-    "cmake.sourceDirectory": "${workspaceFolder}/trainer"
+    "cmake.sourceDirectory": "${workspaceFolder}/trainer",
+    "python.formatting.provider": "black",
+    "python.linting.flake8Enabled": true,
+    "python.linting.enabled": true,
+    "python.linting.flake8Args": [
+        "--max-line-length=120",
+        "--ignore=E402,F403"
+    ],
 }
