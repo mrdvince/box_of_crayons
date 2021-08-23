@@ -19,13 +19,14 @@ def setup_logging(
         config = read_json(log_config)
         for _, handler in config["handlers"].items():
             if "filename" in handler:
-                handler["filename"] = str(save_dir / handler["filename"])
+                handler["filename"] = os.path.join(save_dir, handler["filename"])
         logging.config.dictConfig(config)
     else:
         logging.basicConfig(level=default_level)
 
 
 def get_logger(name, verbosity=2):
+
     log_levels = {0: logging.WARNING, 1: logging.INFO, 2: logging.DEBUG}
     assert (
         verbosity in log_levels
