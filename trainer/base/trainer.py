@@ -55,6 +55,9 @@ class BaseTrainer:
         )
         # wandb
         wandb.init(project=config.name)
+        wandb.tensorboard.patch(
+            root_logdir=os.path.join(os.path.dirname(__file__), "../", "saved", "log")
+        )
 
         if resume is not None:
             self._resume_checkpoint(config.resume)
@@ -122,11 +125,6 @@ class BaseTrainer:
 
             if epoch % self.save_period == 0:
                 self._save_checkpoint(epoch, save_best=best)
-            wandb.tensorboard.patch(
-                root_logdir=os.path.join(
-                    os.path.dirname(__file__), "../", "saved", "log"
-                )
-            )
 
     def _save_checkpoint(self, epoch, save_best=False):
         """
