@@ -52,18 +52,8 @@ class BaseTrainer:
             config.log_dir, self.logger, cfg_trainer["tensorboard"]
         )
         # wandb
-        wandb.init(project=config.name)
-        wandb.tensorboard.patch(
-            root_logdir=os.path.join(
-                os.path.dirname(__file__), "../", config.trainer["save_dir"], "log"
-            )
-        )
-        print(
-            "#################",
-            os.path.join(
-                os.path.dirname(__file__), "../", config.trainer["save_dir"], "log"
-            ),
-        )
+        wandb.init(project=config.name, sync_tensorboard=True)
+
         if resume is not None:
             self._resume_checkpoint(config.resume)
 
