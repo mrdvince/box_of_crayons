@@ -1,6 +1,9 @@
+saved/
 # Prerequisites
 *.d
-
+log/
+wandb/
+saved/
 # Compiled Object files
 *.slo
 *.lo

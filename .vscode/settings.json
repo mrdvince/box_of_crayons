@@ -70,7 +70,20 @@
         "typeinfo": "cpp",
         "valarray": "cpp",
         "variant": "cpp",
-        "*.tpp": "cpp"
+        "*.tpp": "cpp",
+        "__nullptr": "cpp"
     },
-    "cmake.configureOnOpen": false
+    "cmake.configureOnOpen": false,
+    "cmake.sourceDirectory": "${workspaceFolder}/trainer",
+    "python.formatting.provider": "black",
+    "python.linting.flake8Enabled": true,
+    "python.linting.enabled": true,
+    "python.linting.flake8Args": [
+        "--max-line-length=120",
+        "--ignore=E402,F403"
+    ],
+    "python.analysis.extraPaths": [
+        "./trainer",
+        "./trainer"
+    ],
 }
