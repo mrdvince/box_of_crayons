@@ -1,18 +1,17 @@
+import os
 from datetime import datetime
 from pathlib import Path
+
 import numpy as np
 import torch
 
 import data_loader.data_loaders as module_data
-from logger.logger import setup_logging
 import model.loss as module_loss
 import model.metric as module_metric
 import model.model as module_arch
 from config import Config
 from trainer import Trainer
-from logger import get_logger
 from utils.util import prepare_device
-import os
 
 # fix random seeds for reproducibility
 SEED = 42
@@ -36,8 +35,6 @@ def main(config):
     )
     config.save_dir = os.path.join(_save_dir, "models", experiment_name, run_id)
     config.log_dir = os.path.join(_save_dir, "log", experiment_name, run_id)
-    setup_logging(str(config.log_dir))
-    logger = get_logger("train")
 
     # setup data_loader instances
     data_loader = getattr(module_data, config.data_loader["type"])(
@@ -45,12 +42,11 @@ def main(config):
     )  # config.init_obj("data_loader", module_data)
     valid_data_loader = data_loader.split_validation()
     num_classes = len(data_loader.dataset.classes)
-    logger.info(data_loader.dataset.class_to_idx)
+
     # build model architecture, then print to console
     model = getattr(module_arch, config.arch["type"])(
         num_classes, **config.arch["args"]
     )
-    logger.info(model)
     # prepare for (multi-device) GPU training
     device, device_ids = prepare_device(config.n_gpu)
     model = model.to(device)
@@ -68,7 +64,7 @@ def main(config):
     lr_scheduler = getattr(torch.optim.lr_scheduler, config.lr_scheduler["type"])(
         optimizer, **config.lr_scheduler["args"]
     )
-
+    config.class_2_idx = data_loader.dataset.class_to_idx
     trainer = Trainer(
         model,
         criterion,

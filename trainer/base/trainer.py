@@ -7,6 +7,8 @@ from logger import TensorboardWriter, get_logger
 
 import os
 
+from logger.logger import setup_logging
+
 
 class BaseTrainer:
     """
@@ -56,6 +58,9 @@ class BaseTrainer:
 
         if resume is not None:
             self._resume_checkpoint(config.resume)
+        setup_logging(str(config.log_dir))
+        self.logger.info(config.class_2_idx)
+        self.logger.info(model)
 
     @abstractmethod
     def _train_epoch(self, epoch):
@@ -74,11 +79,12 @@ class BaseTrainer:
             result = self._train_epoch(epoch)
             log = {"epoch": epoch}
             log.update(result)
+            self.logger.info(log)
             wandb.log(log)
 
-            # print logged informations to the screen
-            for key, value in log.items():
-                self.logger.info("    {:15s}: {}".format(str(key), value))
+            # # print logged informations to the screen
+            # for key, value in log.items():
+            #     self.logger.info("    {:15s}: {}".format(str(key), value))
 
             # evaluate model performance according to configured metric, save best checkpoint as model_best
             best = False
