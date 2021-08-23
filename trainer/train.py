@@ -4,6 +4,7 @@ import numpy as np
 import torch
 
 import data_loader.data_loaders as module_data
+from logger.logger import setup_logging
 import model.loss as module_loss
 import model.metric as module_metric
 import model.model as module_arch
@@ -22,6 +23,20 @@ np.random.seed(SEED)
 
 
 def main(config):
+    experiment_name = config.name
+    run_id = datetime.now().strftime("%d%m_%H%M%S")
+    _save_dir = os.path.join(os.path.dirname(__file__), config.trainer["save_dir"])
+
+    Path(os.path.join(_save_dir, "models", experiment_name, run_id)).mkdir(
+        parents=True, exist_ok=True
+    )
+
+    Path(os.path.join(_save_dir, "log", experiment_name, run_id)).mkdir(
+        parents=True, exist_ok=True
+    )
+    config.save_dir = os.path.join(_save_dir, "models", experiment_name, run_id)
+    config.log_dir = os.path.join(_save_dir, "log", experiment_name, run_id)
+    setup_logging(str(config.log_dir))
     logger = get_logger("train")
 
     # setup data_loader instances
@@ -29,11 +44,13 @@ def main(config):
         **config.data_loader["args"]
     )  # config.init_obj("data_loader", module_data)
     valid_data_loader = data_loader.split_validation()
-
+    num_classes = len(data_loader.dataset.classes)
+    logger.info(data_loader.dataset.class_to_idx)
     # build model architecture, then print to console
-    model = getattr(module_arch, config.arch["type"])(**config.arch["args"])
+    model = getattr(module_arch, config.arch["type"])(
+        num_classes, **config.arch["args"]
+    )
     logger.info(model)
-
     # prepare for (multi-device) GPU training
     device, device_ids = prepare_device(config.n_gpu)
     model = model.to(device)
@@ -51,20 +68,6 @@ def main(config):
     lr_scheduler = getattr(torch.optim.lr_scheduler, config.lr_scheduler["type"])(
         optimizer, **config.lr_scheduler["args"]
     )
-
-    experiment_name = config.name
-    run_id = datetime.now().strftime("%d%m_%H%M%S")
-    _save_dir = os.path.join(os.path.dirname(__file__), config.trainer["save_dir"])
-
-    Path(os.path.join(_save_dir, "models", experiment_name, run_id)).mkdir(
-        parents=True, exist_ok=True
-    )
-
-    Path(os.path.join(_save_dir, "log", experiment_name, run_id)).mkdir(
-        parents=True, exist_ok=True
-    )
-    config.save_dir = os.path.join(_save_dir, "models", experiment_name, run_id)
-    config.log_dir = os.path.join(_save_dir, "log", experiment_name, run_id)
 
     trainer = Trainer(
         model,

@@ -2,7 +2,7 @@ from torch import nn
 from torchvision import models
 
 
-def model(num_classes=24):
+def model(num_classes):
     model_tl = models.densenet121(pretrained=True)
     for param in model_tl.features.parameters():
         param.requires_grad = False
