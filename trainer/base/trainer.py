@@ -53,8 +53,17 @@ class BaseTrainer:
         )
         # wandb
         wandb.init(project=config.name)
-        wandb.tensorboard.patch(root_logdir=config.log_dir)
-
+        wandb.tensorboard.patch(
+            root_logdir=os.path.join(
+                os.path.dirname(__file__), "../", config.trainer["save_dir"], "log"
+            )
+        )
+        print(
+            "#################",
+            os.path.join(
+                os.path.dirname(__file__), "../", config.trainer["save_dir"], "log"
+            ),
+        )
         if resume is not None:
             self._resume_checkpoint(config.resume)
 
