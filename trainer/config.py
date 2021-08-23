@@ -39,7 +39,7 @@ class Config:
         return {
             "type": "Loader",
             "args": {
-                "data_dir": "/mnt/c/Users/vinc3/Pictures",
+                "data_dir": "/data/nebo/PlantVillage",
                 "batch_size": 16,
                 "shuffle": True,
                 "validation_split": 0.1,
