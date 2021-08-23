@@ -1,9 +1,3 @@
-from model import model
-from data_loader import data_loaders
-
-import torch
-
-
 class Config:
     name = "box_of_crayons[boc]"
     n_gpu = 1
@@ -52,24 +46,3 @@ class Config:
                 "num_workers": 2,
             },
         }
-
-
-# config = Config()
-# config.ld = "awesome"
-# # dl = getattr(data_loaders, config.data_loader['type'])(**config.data_loader["args"])
-# # print(dl.dataset.class_to_idx)
-# import numpy as np
-# ml = getattr(model, config.arch["type"])(**config.arch["args"])
-# trainable_params = ml.classifier.parameters()
-# opt = getattr(torch.optim, config.optimizer["type"])(
-#     ml.parameters(), **config.optimizer["args"]
-# )
-# print(sum(p.numel() for p in ml.parameters() if p.requires_grad))
-# # print(ml)#sum([np.prod(p.size()) for p in trainable_params]))
-# # # lr = getattr(torch.optim.lr_scheduler, config.lr_scheduler["type"])(opt, **config.lr_scheduler["args"])
-# # from pathlib import Path
-# # import os
-# # print(Path(os.path.join(os.path.dirname(__file__),config.trainer['save_dir'])))
-# save_dir
-# log_dir
-# resume
