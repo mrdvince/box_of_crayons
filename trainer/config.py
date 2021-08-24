@@ -40,9 +40,10 @@ class Config:
             "type": "Loader",
             "args": {
                 "data_dir": "/data/nebo/PlantVillage",
-                "batch_size": 16,
+                "batch_size": 64,
                 "shuffle": True,
-                "validation_split": 0.1,
-                "num_workers": 2,
+                "validation_split": 0.2,
+                "num_workers": 4 * self.n_gpu,
+                "pin_memory": True,
             },
         }

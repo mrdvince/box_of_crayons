@@ -8,7 +8,9 @@ class BaseDataLoader(DataLoader):
     Base class for all dataloaders
     """
 
-    def __init__(self, dataset, batch_size, shuffle, validation_split, num_workers):
+    def __init__(
+        self, dataset, batch_size, shuffle, validation_split, num_workers, pin_memory
+    ):
         self.validation_split = validation_split
         self.shuffle = shuffle
         self.batch_idx = 0
@@ -22,6 +24,7 @@ class BaseDataLoader(DataLoader):
             "batch_size": batch_size,
             "shuffle": self.shuffle,
             "num_workers": num_workers,
+            "pin_memory": pin_memory,
         }
 
         super().__init__(sampler=self.train_sampler, **self.init_kwargs)

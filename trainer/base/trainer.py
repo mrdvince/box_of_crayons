@@ -49,12 +49,17 @@ class BaseTrainer:
                 self.early_stop = np.inf
         self.start_epoch = 1
         self.checkpoint_dir = config.save_dir
+
+        # wandb
+        wandb.tensorboard.patch(
+            save=True, tensorboardX=True, root_logdir=config.log_dir
+        )
+        wandb.init(project=config.name)
+
         # tensorboard
         self.writer = TensorboardWriter(
             config.log_dir, self.logger, cfg_trainer["tensorboard"]
         )
-        # wandb
-        wandb.init(project=config.name, sync_tensorboard=True)
 
         if resume is not None:
             self._resume_checkpoint(config.resume)

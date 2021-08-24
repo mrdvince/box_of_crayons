@@ -4,7 +4,13 @@ from torchvision import datasets, transforms
 
 class Loader(BaseDataLoader):
     def __init__(
-        self, data_dir, batch_size, shuffle=True, validation_split=0.2, num_workers=4
+        self,
+        data_dir,
+        batch_size,
+        shuffle=True,
+        validation_split=0.2,
+        num_workers=4,
+        pin_memory=True,
     ):
         transform = transforms.Compose(
             [
@@ -17,5 +23,5 @@ class Loader(BaseDataLoader):
         )
         self.dataset = datasets.ImageFolder(root=data_dir, transform=transform)
         super().__init__(
-            self.dataset, batch_size, shuffle, validation_split, num_workers
+            self.dataset, batch_size, shuffle, validation_split, num_workers, pin_memory
         )
