@@ -16,7 +16,7 @@ class CDataset : public torch::data::Dataset<CDataset> {
     size_t dataset_size;
 
    public:
-    CDataset(std::vector<std::string> list_images, std::vector<int> list_labels) {
+    explicit CDataset(std::vector<std::string> list_images, std::vector<int> list_labels) {
         images = process_images(list_images);
         labels = process_labels(list_labels);
         dataset_size = images.size();

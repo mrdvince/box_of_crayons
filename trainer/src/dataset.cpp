@@ -22,7 +22,7 @@ std::vector<torch::Tensor> process_images(std::vector<std::string> list_of_image
     return images;
 };
 std::vector<torch::Tensor> process_labels(std::vector<int> list_of_labels) {
-    std::vector<torch::Tensor> labels;
+    static std::vector<torch::Tensor> labels;
     for (std::vector<int>::iterator it = list_of_labels.begin(); it != list_of_labels.end(); ++it) {
         torch::Tensor label = read_label(*it);
         labels.push_back(label);
