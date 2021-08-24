@@ -43,6 +43,7 @@ class Config:
                 "batch_size": 64,
                 "shuffle": True,
                 "validation_split": 0.2,
-                "num_workers": 8,
+                "num_workers": 4 * self.n_gpu,
+                "pin_memory": True,
             },
         }
