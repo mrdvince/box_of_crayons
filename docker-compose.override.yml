@@ -1,32 +1,21 @@
-version: '3.3'
+version: '3.9'
 services:
-
+  traefik:
+    labels: 
+      - traefik.enable=false
   backend:
+    volumes:
+      - ./bocr/app:/app
+    command: /start-reload.sh
     ports:
-      - 80:80
-
-  # grafana:
-  #   ports:
-  #     - 3000:3000
-
-  # prometheus:
-  #   ports: 
-  #     - 9090:9090
-  
-  # statsd-exporter:
-  #   ports:
-  #     - 9123:9102
-  #     - 8125:8125/udp
-
-  # flower:
-  #   ports:
-  #     - "5555:5555"
-
-  # webserver:
-  #   ports:
-  #     - "8080:8080"
-            
-      
+      - 8080:80
+    labels: 
+      - traefik.enable=false
+  pgadmin:
+    labels: 
+      - traefik.enable=false
+    ports:
+      - 5050:5050
 networks:
   traefik-public:
     external: false

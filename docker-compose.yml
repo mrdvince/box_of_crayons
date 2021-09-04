@@ -1,35 +1,108 @@
-version: '3.3'
+version: '3.9'
 
 services:
+  traefik:
+    image: traefik:v2.4.13
+    ports:
+      - 80:80
+      - 443:443
+    restart: always
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.traefik-dashboard.loadbalancer.server.port=8080
+      - traefik.http.routers.traefik-dashboard-http.entrypoints=http
+      - traefik.http.routers.traefik-dashboard-http.rule=Host(`traefik.${DOMAIN?Variable not set}`)
+      - traefik.docker.network=traefik-public
+      - traefik.http.routers.traefik-dashboard-https.entrypoints=https
+      - traefik.http.routers.traefik-dashboard-https.rule=Host(`traefik.${DOMAIN?Variable not set}`)
+      - traefik.http.routers.traefik-dashboard-https.tls=true
+      - traefik.http.routers.traefik-dashboard-https.tls.certresolver=le
+      - traefik.http.routers.traefik-dashboard-https.service=api@internal
+      - traefik.http.middlewares.https-redirect.redirectscheme.scheme=https
+      - traefik.http.middlewares.https-redirect.redirectscheme.permanent=true
+      - traefik.http.routers.traefik-dashboard-http.middlewares=https-redirect
+      - traefik.http.middlewares.admin-auth.basicauth.users=${USERNAME?Variable not set}:${HASHED_PASSWORD?Variable not set}
+      - traefik.http.routers.traefik-dashboard-https.middlewares=admin-auth
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - traefik-public-certificates:/certificates
+    command:
+      - --providers.docker
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.http.address=:80
+      - --entrypoints.https.address=:443
+      - --certificatesresolvers.le.acme.email=${DEV_LE?Variable not set}
+      - --certificatesresolvers.le.acme.storage=/certificates/acme.json
+      - --certificatesresolvers.le.acme.tlschallenge=true
+      - --accesslog
+      - --log
+      - --api
+    networks:
+      - ${TRAEFIK_PUBLIC_NETWORK?Variable not set}
+      - default
 
   backend:
-    image: vers
+    image: bocr
+    env_file: 
+      - .env
     build:
-      context: ./vers
+      context: ./bocr
       dockerfile: backend.dockerfile
     restart: always
     labels:
-      # Enable Traefik for this specific "backend" service
       - traefik.enable=true
-      # Define the port inside of the Docker service to use
-      - traefik.http.services.app.loadbalancer.server.port=80
-      # Make Traefik use this domain in HTTP
-      - traefik.http.routers.app-http.entrypoints=http
+      - traefik.docker.network=${TRAEFIK_PUBLIC_NETWORK?Variable not set}
       - traefik.http.routers.app-http.rule=Host(`prod.api.${DOMAIN?Variable not set}`)
-      # Use the traefik-public network (declared below)
-      - traefik.docker.network=traefik-public
-      # Make Traefik use this domain in HTTPS
-      - traefik.http.routers.app-https.entrypoints=https
-      - traefik.http.routers.app-https.rule=Host(`prod.api.${DOMAIN?Variable not set}`)
-      - traefik.http.routers.app-https.tls=true
-      # Use the "le" (Let's Encrypt) resolver
-      - traefik.http.routers.app-https.tls.certresolver=le
-      # Middleware to redirect HTTP to HTTPS
+      - traefik.http.routers.app-http.entrypoints=http
       - traefik.http.routers.app-http.middlewares=https-redirect
+      - traefik.http.routers.app-https.rule=Host(`prod.api.${DOMAIN?Variable not set}`)
+      - traefik.http.routers.app-https.entrypoints=https
+      - traefik.http.routers.app-https.tls=true
+      - traefik.http.routers.app-https.tls.certresolver=le
+      - traefik.http.services.app.loadbalancer.server.port=80
     networks:
-      # Use the public network created to be shared between Traefik and
-      # any other service that needs to be publicly available with HTTPS
-      - traefik-public
+      - ${TRAEFIK_PUBLIC_NETWORK?Variable not set}
+      - default
+
+  db:
+    image: postgres:12
+    restart: always
+    volumes:
+      - app-db-data:/var/lib/postgresql/data/pgdata
+    env_file:
+      - .env
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    deploy:
+      placement:
+        constraints:
+          - node.labels.${STACK_NAME?Variable not set}.app-db-data == true
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    networks:
+      - ${TRAEFIK_PUBLIC_NETWORK?Variable not set}
+      - default
+    depends_on:
+      - db
+    env_file:
+      - .env
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${TRAEFIK_PUBLIC_NETWORK?Variable not set}
+      - traefik.http.routers.${STACK_NAME?Variable not set}-pgadmin-http.rule=Host(`pgadmin.${DOMAIN?Variable not set}`)
+      - traefik.http.routers.${STACK_NAME?Variable not set}-pgadmin-http.entrypoints=http
+      - traefik.http.routers.${STACK_NAME?Variable not set}-pgadmin-http.middlewares=https-redirect
+      - traefik.http.routers.${STACK_NAME?Variable not set}-pgadmin-https.rule=Host(`pgadmin.${DOMAIN?Variable not set}`)
+      - traefik.http.routers.${STACK_NAME?Variable not set}-pgadmin-https.entrypoints=https
+      - traefik.http.routers.${STACK_NAME?Variable not set}-pgadmin-https.tls=true
+      - traefik.http.routers.${STACK_NAME?Variable not set}-pgadmin-https.tls.certresolver=le
+      - traefik.http.services.${STACK_NAME?Variable not set}-pgadmin.loadbalancer.server.port=5050
+
+volumes:
+  traefik-public-certificates:
+  app-db-data:
 
 networks:
   traefik-public:
