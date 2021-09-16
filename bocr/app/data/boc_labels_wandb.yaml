@@ -1,0 +1,20 @@
+names:
+- Apple scab
+- Cedar apple rust
+- Apple frogeye spot
+- Maize cercospora leaf spot
+- Maize common rust
+- Maize northern leaf blight
+- Orange citrus greening
+- Potato blight
+- Tomato bacterial spot
+- Tomato blight
+- Tomato leaf mold
+- Tomato septoria leaf spot
+- Tomato spider mites
+- Tomato target spot
+- Tomato mosaic virus
+- Tomato yellow leaf curl virus
+nc: 16
+train: wandb-artifact://box_of_crayons/train
+val: wandb-artifact://box_of_crayons/val
