@@ -1,3 +1,4 @@
 [submodule "bocr/app/trainer"]
 	path = bocr/app/trainer
 	url = git@github.com:mrdvince/yolov5.git
+	branch = mod

@@ -1,0 +1,23 @@
+train: /home/vinc3/data/boc/train/
+val: /home/vinc3/data/boc/val/
+
+# Classes
+nc: 16 # number of classes
+names: [
+    "Apple scab",
+    "Cedar apple rust",
+    "Apple frogeye spot",
+    "Maize cercospora leaf spot",
+    "Maize common rust",
+    "Maize northern leaf blight",
+    "Orange citrus greening",
+    "Potato blight",
+    "Tomato bacterial spot",
+    "Tomato blight",
+    "Tomato leaf mold",
+    "Tomato septoria leaf spot",
+    "Tomato spider mites",
+    "Tomato target spot",
+    "Tomato mosaic virus",
+    "Tomato yellow leaf curl virus",
+  ] # class names
