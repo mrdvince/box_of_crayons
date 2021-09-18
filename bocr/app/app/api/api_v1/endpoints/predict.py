@@ -13,6 +13,8 @@ router = APIRouter()
 
 @router.post("/")
 def get_predictions(
+    conf_thresh: float,
+    iou_thresh: float = 0.4,
     db: Session = Depends(deps.get_db),
     file: UploadFile = File(...),
     current_user: models.User = Depends(deps.get_current_active_user),
@@ -21,7 +23,7 @@ def get_predictions(
     Upload image and get prediction
     """
     if crud.user.is_active(current_user):
-        img, res_str = predict(file)
+        img, res_str = predict(file, iou_thres=iou_thresh, conf_thres=conf_thresh)
 
         headers = {
             "Access-Control-Allow-Origin": "*",

@@ -226,7 +226,7 @@ def run_inference(
     return im0, res_str
 
 
-def predict(bytes):
+def predict(bytes, iou_thres: float, conf_thres: float):
     img = read_imagefile(bytes.file.read())
     filename = bytes.filename
     filename_path = os.path.join(f"{image_dir}/{filename}")
@@ -237,9 +237,9 @@ def predict(bytes):
         weights=weights,
         source=filename_path,
         line_thickness=1,
-        iou_thres=0.4,
-        conf_thres=0.1,
-        # save_crop=True,
+        iou_thres=iou_thres,
+        conf_thres=conf_thres,
+        save_crop=True,
         save_conf=True,
     )
     res_str = res_str[7:].strip()[:-1]
