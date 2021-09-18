@@ -84,6 +84,7 @@
     ],
     "python.analysis.extraPaths": [
         "./trainer",
-        "./trainer"
+        "./trainer",
+        "./bocr/app/trainer"
     ],
 }
