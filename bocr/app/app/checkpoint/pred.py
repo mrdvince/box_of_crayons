@@ -1,3 +1,57 @@
+import os
+import time
+from io import BytesIO
+from pathlib import Path
+import cv2
+import numpy as np
+import torch
+import wandb
+from PIL import Image
+import sys
+import io
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "../../", "trainer/"))
+from models.experimental import attempt_load
+from utils.datasets import LoadImages
+from utils.general import (
+    check_img_size,
+    colorstr,
+    increment_path,
+    is_ascii,
+    non_max_suppression,
+    save_one_box,
+    scale_coords,
+    set_logging,
+    strip_optimizer,
+    xyxy2xywh,
+)
+from utils.plots import Annotator, colors
+from utils.torch_utils import (
+    select_device,
+    time_sync,
+)
+
+model_name = "best.pt"
+
+image_dir = os.path.join(os.path.dirname(__file__), "../../", "images")
+
+wandb.login(key=os.environ["WANDB_KEY"])
+run = wandb.init(project="prod_boc")
+artifact = run.use_artifact(
+    f"droid/box_of_crayons/{os.environ['WANDB_MODEL']}", type="model"
+)
+artifact_dir = artifact.download()
+weights = os.path.join(
+    os.path.dirname(__file__), "../../", artifact_dir, f"{model_name}"
+)
+
+
+def read_imagefile(data) -> Image.Image:
+    img_stream = BytesIO(data)
+    img = cv2.imdecode(np.frombuffer(img_stream.read(), np.uint8), cv2.IMREAD_COLOR)
+    return img
+
+
 @torch.no_grad()
 def run_inference(
     weights,  # model.pt path(s)
