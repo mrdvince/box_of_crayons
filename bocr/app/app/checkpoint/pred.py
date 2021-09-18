@@ -225,3 +225,24 @@ def run_inference(
     print(f"Done. ({time.time() - t0:.3f}s)")
     return im0, res_str
 
+
+def predict(bytes):
+    img = read_imagefile(bytes.file.read())
+    filename = bytes.filename
+    filename_path = os.path.join(f"{image_dir}/{filename}")
+    print(filename_path)
+    cv2.imwrite(filename_path, img)
+
+    image, res_str = run_inference(
+        weights=weights,
+        source=filename_path,
+        line_thickness=1,
+        iou_thres=0.4,
+        conf_thres=0.1,
+        # save_crop=True,
+        save_conf=True,
+    )
+    res_str = res_str[7:].strip()[:-1]
+    is_success, buffer = cv2.imencode(".jpg", image)
+    io_buf = io.BytesIO(buffer)
+    return io_buf, str(res_str)
