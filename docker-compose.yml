@@ -5,6 +5,8 @@ services:
     image: bocr
     env_file: 
       - .env
+    volumes:
+      - ./bocr/app:/app
     build:
       context: ./bocr
       dockerfile: backend.dockerfile
