@@ -34,7 +34,6 @@ from utils.torch_utils import (
 model_name = "best.pt"
 
 image_dir = os.path.join(os.path.dirname(__file__), "../../", "images")
-Path.mkdir(image_dir, exist_ok=True)
 wandb.login(key=os.environ["WANDB_KEY"])
 run = wandb.init(project="prod_boc")
 artifact = run.use_artifact(
