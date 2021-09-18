@@ -1,8 +1,5 @@
 version: '3.9'
 services:
-  traefik:
-    labels: 
-      - traefik.enable=false
   backend:
     volumes:
       - ./bocr/app:/app
