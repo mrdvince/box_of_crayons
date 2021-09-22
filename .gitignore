@@ -175,3 +175,5 @@ dmypy.json
 cython_debug/
 bocr/app/runs
 bocr/app/images/
+box_of_crayons/
+artifacts/
