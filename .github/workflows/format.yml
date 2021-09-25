@@ -1,5 +1,5 @@
 # This workflow will format and lint
-name: Nebo
+name: Format
 
 on:
   pull_request:
