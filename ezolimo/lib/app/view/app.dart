@@ -1,7 +1,10 @@
-import 'package:ezolimo/counter/counter.dart';
-import 'package:ezolimo/l10n/l10n.dart';
+// ignore_for_file: always_use_package_imports
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+
+import '../../counter/counter.dart';
+import '../../l10n/l10n.dart';
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
