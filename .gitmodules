@@ -2,3 +2,7 @@
 	path = bocr/app/trainer
 	url = git@github.com:mrdvince/yolov5.git
 	branch = mod
+
+[submodule "bocr/ezolimo"]
+	path = bocr/ezolimo
+	url = git@github.com:mrdvince/ezolimo.git
