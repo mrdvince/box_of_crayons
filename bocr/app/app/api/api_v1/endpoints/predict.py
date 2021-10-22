@@ -1,11 +1,17 @@
 import os
 from pathlib import Path
 from typing import Any
-import wandb
 from app import crud, models
 from app.api import deps
 from app.checkpoint.pred import predict
-from fastapi import APIRouter, Depends, File, HTTPException, Response, UploadFile
+from fastapi import (
+    APIRouter,
+    Depends,
+    File,
+    HTTPException,
+    UploadFile,
+    responses,
+)
 from sqlalchemy.orm import Session
 
 from models.experimental import attempt_load
@@ -15,13 +21,13 @@ router = APIRouter()
 
 
 model_name = "best.pt"
-
-wandb.login(key=os.environ["WANDB_KEY"])
-run = wandb.init(project="box_of_crayons", entity="droid")
-artifact = run.use_artifact(
-    f"droid/box_of_crayons/{os.environ['WANDB_MODEL']}", type="model"
-)
-artifact_dir = artifact.download("/app/artifacts")
+artifact_dir = "/app/artifacts"
+# wandb.login(key=os.environ["WANDB_KEY"])
+# run = wandb.init(project="box_of_crayons", entity="droid")
+# artifact = run.use_artifact(
+#     f"droid/box_of_crayons/{os.environ['WANDB_MODEL']}", type="model"
+# )
+# artifact_dir = artifact.download("/app/artifacts")
 weights = os.path.join(
     os.path.dirname(__file__), "../../", artifact_dir, f"{model_name}"
 )
@@ -56,7 +62,7 @@ def get_predictions(
     Upload image and get prediction
     """
     if crud.user.is_active(current_user):
-        img, res_str = predict(
+        res_str, inf_ls, cinames = predict(
             pt,
             stride,
             model,
@@ -65,18 +71,13 @@ def get_predictions(
             conf_thres=conf_thresh,
             weights=weights,
         )
-
-        headers = {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
-            "Access-Control-Allow-Headers": "Authorization, Content-Type",
+        pathogens = set([str(cname).split("/")[3] for cname in cinames])
+        res_str = {
+            "no_pathogens": len(pathogens),
+            "pathogen_names": list(pathogens),
+            "image_crops": cinames,
         }
-        headers["response_string"] = str(res_str)
-
-        response = Response(
-            content=img.getvalue(), media_type="image/jpg", headers=headers
-        )
-        return response
+        return res_str, responses.FileResponse(inf_ls[0], filename=inf_ls[1])
     else:
         raise HTTPException(
             status_code=400,
