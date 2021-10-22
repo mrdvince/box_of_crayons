@@ -19,7 +19,6 @@ jobs:
         port: ${{ secrets.PORT }}
         script: |
           cd ~/box_of_crayons
-          git stash
           git checkout master
           git pull origin master
           docker-compose -f docker-compose.yml up -d --no-deps --force-recreate backend
