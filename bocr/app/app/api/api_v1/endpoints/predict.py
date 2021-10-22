@@ -1,20 +1,15 @@
 import os
 from pathlib import Path
 from typing import Any
+
+import wandb
 from app import crud, models
 from app.api import deps
 from app.checkpoint.pred import predict
-from fastapi import (
-    APIRouter,
-    Depends,
-    File,
-    HTTPException,
-    UploadFile,
-    responses,
-)
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, responses
+from models.experimental import attempt_load
 from sqlalchemy.orm import Session
 
-from models.experimental import attempt_load
 from utils.torch_utils import select_device
 
 router = APIRouter()
@@ -22,15 +17,19 @@ router = APIRouter()
 
 model_name = "best.pt"
 artifact_dir = "/app/artifacts"
-# wandb.login(key=os.environ["WANDB_KEY"])
-# run = wandb.init(project="box_of_crayons", entity="droid")
-# artifact = run.use_artifact(
-#     f"droid/box_of_crayons/{os.environ['WANDB_MODEL']}", type="model"
-# )
-# artifact_dir = artifact.download("/app/artifacts")
 weights = os.path.join(
-    os.path.dirname(__file__), "../../", artifact_dir, f"{model_name}"
+    os.path.dirname(__file__),
+    "../../",
+    artifact_dir,
+    f"{os.environ['WANDB_MODEL']+'/'+model_name}",
 )
+if not os.path.exists(weights):
+    wandb.login(key=os.environ["WANDB_KEY"])
+    run = wandb.init(project="box_of_crayons", entity="droid")
+    artifact = run.use_artifact(
+        f"droid/box_of_crayons/{os.environ['WANDB_MODEL']}", type="model"
+    )
+    artifact_dir = artifact.download("/app/artifacts")
 
 
 def preload_model(weights, device):
