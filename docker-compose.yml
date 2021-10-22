@@ -1,9 +1,10 @@
-version: '3.9'
+version: "3.9"
 
 services:
   backend:
     image: bocr
-    env_file: 
+    container_name: bocr
+    env_file:
       - .env
     volumes:
       - ./bocr/app:/app
@@ -28,6 +29,7 @@ services:
 
   db:
     image: postgres:12
+    container_name: db
     restart: always
     volumes:
       - app-db-data:/var/lib/postgresql/data/pgdata
@@ -42,6 +44,7 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4
+    container_name: pgadmin
     restart: always
     networks:
       - ${TRAEFIK_PUBLIC_NETWORK?Variable not set}
