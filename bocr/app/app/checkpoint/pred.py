@@ -5,7 +5,6 @@ from pathlib import Path
 import cv2
 import numpy as np
 import torch
-import wandb
 from PIL import Image
 import sys
 import io
@@ -31,19 +30,6 @@ from utils.torch_utils import (
     time_sync,
 )
 
-model_name = "best.pt"
-
-image_dir = os.path.join(os.path.dirname(__file__), "../../", "images")
-wandb.login(key=os.environ["WANDB_KEY"])
-run = wandb.init(project="prod_boc")
-artifact = run.use_artifact(
-    f"droid/box_of_crayons/{os.environ['WANDB_MODEL']}", type="model"
-)
-artifact_dir = artifact.download()
-weights = os.path.join(
-    os.path.dirname(__file__), "../../", artifact_dir, f"{model_name}"
-)
-
 
 def read_imagefile(data) -> Image.Image:
     img_stream = BytesIO(data)
@@ -51,8 +37,14 @@ def read_imagefile(data) -> Image.Image:
     return img
 
 
+image_dir = os.path.join(os.path.dirname(__file__), "../../", "images")
+
+
 @torch.no_grad()
 def run_inference(
+    pt,
+    stride,
+    model,
     weights,  # model.pt path(s)
     source,  # file/dir/URL/glob, 0 for webcam
     imgsz=[640],  # inference size (pixels)
@@ -92,16 +84,6 @@ def run_inference(
     device = select_device(device)
     half &= device.type != "cpu"  # half precision only supported on CUDA
 
-    # Load model
-    w = weights[0] if isinstance(weights, list) else weights
-    _, suffix = False, Path(w).suffix.lower()
-    pt, onnx, tflite, pb, saved_model = (
-        suffix == x for x in [".pt", ".onnx", ".tflite", ".pb", ""]
-    )  # backend
-    stride, names = 64, [f"class{i}" for i in range(1000)]  # assign defaults
-
-    model = attempt_load(weights, map_location=device)  # load FP32 model
-    stride = int(model.stride.max())  # model stride
     names = (
         model.module.names if hasattr(model, "module") else model.names
     )  # get class names
@@ -225,14 +207,16 @@ def run_inference(
     return im0, res_str
 
 
-def predict(bytes, iou_thres: float, conf_thres: float):
+def predict(pt, stride, model, bytes, iou_thres: float, conf_thres: float, weights):
     img = read_imagefile(bytes.file.read())
     filename = bytes.filename
     filename_path = os.path.join(f"{image_dir}/{filename}")
-    print(filename_path)
     cv2.imwrite(filename_path, img)
 
     image, res_str = run_inference(
+        pt,
+        stride,
+        model,
         weights=weights,
         source=filename_path,
         line_thickness=1,
