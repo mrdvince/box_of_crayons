@@ -5,7 +5,7 @@ from typing import Any
 import wandb
 from app import crud, models
 from app.api import deps
-from app.checkpoint.pred import predict
+from app.nebo.pred import predict
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, responses
 from models.experimental import attempt_load
 from sqlalchemy.orm import Session
