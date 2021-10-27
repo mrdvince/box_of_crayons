@@ -11,15 +11,9 @@ def hello_world():
 
 
 dag = DAG(
-        'test_dag',
-        schedule_interval='*/1 * * * *',
-        start_date=datetime.datetime.now()
-             
+    "test_dag", schedule_interval="*/1 * * * *", start_date=datetime.datetime.now()
 )
 
 greet_task = PythonOperator(
-    task_id="hello_world_task",
-    python_callable=hello_world,
-    
-    dag=dag
+    task_id="hello_world_task", python_callable=hello_world, dag=dag
 )
