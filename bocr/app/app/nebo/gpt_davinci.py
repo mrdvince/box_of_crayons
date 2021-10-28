@@ -3,7 +3,7 @@ import openai
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-start_sequence = "\nA: "
+start_sequence = "\nA:"
 restart_sequence = "\n\nQ: "
 
 
