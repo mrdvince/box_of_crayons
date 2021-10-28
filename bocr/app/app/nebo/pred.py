@@ -65,7 +65,7 @@ def run_inference(
     exist_ok=False,  # existing project/name ok, do not increment
     line_thickness=3,  # bounding box thickness (pixels)
     hide_labels=False,  # hide labels
-    hide_conf=False,  # hide confidences
+    hide_conf=True,  # hide confidences
     half=False,  # use FP16 half-precision inference
 ):
     imgsz *= 2 if len(imgsz) == 1 else 1
