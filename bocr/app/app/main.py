@@ -20,15 +20,15 @@ Also get some answers to your question using OpenAI's GPT3 (Am on free credits s
 Model used is a YoloV5
 > Note: the dataset used was manually labelled and still needs to be improved for a better and more accurate model
 
-### Disease typess
-   'Apple Scab',
-    'Apple Cedar Rust',
-    'Apple Frogeye Spot',
-    'Maize Gray Leaf Spot',
-    'Maize Leaf Blight',
-    'Potato Blight',
-    'Tomato Bacteria Spot',
-    'Tomato Blight',
+### Disease types
+- Apple Scab
+- Apple Cedar Rust
+- Apple Frogeye Spot
+- Maize Gray Leaf Spot
+- Maize Leaf Blight
+- Potato Blight
+- Tomato Bacteria Spot
+- Tomato Blight
     """,
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
 )
