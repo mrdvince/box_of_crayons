@@ -1,5 +1,7 @@
 # Nebo
 
+> Nebo is a noun meaning the Babylonian god of wisdom and agriculture and patron of scribes and schools
+
 ### Introduction
 This project aims to combine computer vision and natural language processing to build a tool that can be used by anyone (from agricultural researchers, farmers, and hobbyists).
 
