@@ -1,14 +1,12 @@
-FROM python:3.9.9-slim
+FROM python:3.9
 
 WORKDIR /app/
 
 COPY ./requirements.txt /tmp/requirements.txt
-COPY ./scripts/start.sh /start.sh
-COPY ./scripts/start-reload.sh /start-reload.sh
 
 RUN pip install --no-cache-dir --upgrade -r /tmp/requirements.txt
 
-# fix opencv libgl 
+# fix opencv libgl errors
 RUN apt-get update && apt-get install libgl1 -y
 
 COPY . /app/
