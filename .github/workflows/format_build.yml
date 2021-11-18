@@ -12,7 +12,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         submodules: recursive
-        ref: dev
+        ref: development
     
     - name: Set up Python 3.9
       uses: actions/setup-python@v2
@@ -44,7 +44,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: recursive
-          ref: dev
+          ref: development
       - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v1

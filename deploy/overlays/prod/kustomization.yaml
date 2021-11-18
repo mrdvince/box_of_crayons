@@ -6,3 +6,4 @@ commonLabels:
 
 patches:
   - prod-ingress.yaml
+  - deployment.yaml

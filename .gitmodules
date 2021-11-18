@@ -1,7 +1,8 @@
 [submodule "ezolimo"]
 	path = ezolimo
 	url = git@github.com:mrdvince/ezolimo.git
-	branch = mod
 [submodule "trainer"]
 	path = trainer
 	url = git@github.com:mrdvince/yolov5.git
+[submodule ".\\trainer\\"]
+	branch = mod
