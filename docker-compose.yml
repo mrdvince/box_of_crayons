@@ -2,30 +2,19 @@ version: "3.9"
 
 services:
   backend:
-    image: registry.nebo.africa/bocr
     container_name: bocr
     env_file:
       - .env
     volumes:
-      - ./bocr/app:/app
+      - ./:/app
     build:
-      context: ./bocr
-      dockerfile: backend.dockerfile
+      context: ./
+      dockerfile: Dockerfile
+    command: /start-reload.sh
+    ports:
+      - 8080:80
     restart: always
-    labels:
-      - traefik.enable=true
-      - traefik.docker.network=${TRAEFIK_PUBLIC_NETWORK?Variable not set}
-      - traefik.http.routers.app-http.rule=Host(`prod.api.${DOMAIN?Variable not set}`)
-      - traefik.http.routers.app-http.entrypoints=http
-      - traefik.http.routers.app-http.middlewares=https-redirect
-      - traefik.http.routers.app-https.rule=Host(`prod.api.${DOMAIN?Variable not set}`)
-      - traefik.http.routers.app-https.entrypoints=https
-      - traefik.http.routers.app-https.tls=true
-      - traefik.http.routers.app-https.tls.certresolver=le
-      - traefik.http.services.app.loadbalancer.server.port=80
-    networks:
-      - ${TRAEFIK_PUBLIC_NETWORK?Variable not set}
-      - default
+
 
   db:
     image: postgres:12
@@ -37,38 +26,6 @@ services:
       - .env
     environment:
       - PGDATA=/var/lib/postgresql/data/pgdata
-    deploy:
-      placement:
-        constraints:
-          - node.labels.${STACK_NAME?Variable not set}.app-db-data == true
-
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin
-    restart: always
-    networks:
-      - ${TRAEFIK_PUBLIC_NETWORK?Variable not set}
-      - default
-    depends_on:
-      - db
-    env_file:
-      - .env
-    labels:
-      - traefik.enable=true
-      - traefik.docker.network=${TRAEFIK_PUBLIC_NETWORK?Variable not set}
-      - traefik.http.routers.${STACK_NAME?Variable not set}-pgadmin-http.rule=Host(`pgadmin.${DOMAIN?Variable not set}`)
-      - traefik.http.routers.${STACK_NAME?Variable not set}-pgadmin-http.entrypoints=http
-      - traefik.http.routers.${STACK_NAME?Variable not set}-pgadmin-http.middlewares=https-redirect
-      - traefik.http.routers.${STACK_NAME?Variable not set}-pgadmin-https.rule=Host(`pgadmin.${DOMAIN?Variable not set}`)
-      - traefik.http.routers.${STACK_NAME?Variable not set}-pgadmin-https.entrypoints=https
-      - traefik.http.routers.${STACK_NAME?Variable not set}-pgadmin-https.tls=true
-      - traefik.http.routers.${STACK_NAME?Variable not set}-pgadmin-https.tls.certresolver=le
-      - traefik.http.services.${STACK_NAME?Variable not set}-pgadmin.loadbalancer.server.port=5050
 
 volumes:
-  traefik-public-certificates:
   app-db-data:
-
-networks:
-  traefik-public:
-    external: true
