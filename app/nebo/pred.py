@@ -8,7 +8,7 @@ import torch
 from PIL import Image
 import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "../../", "trainer/"))
+sys.path.append(os.path.join('/app/trainer'))
 from utils.datasets import LoadImages
 from utils.general import (
     check_img_size,
