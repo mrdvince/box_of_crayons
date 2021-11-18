@@ -1,0 +1,33 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: bocr-http
+  namespace: nebo
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: Host(`dev.api.nebo.africa`)
+      services:
+        - name: bocr-svc
+          port: 80
+      middlewares:
+        - name: traefik-redirect-scheme
+          namespace: cattle-system
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: bocr-https
+  namespace: nebo
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`dev.api.nebo.africa`)
+      services:
+        - name: bocr-svc
+          port: 80

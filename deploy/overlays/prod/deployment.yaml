@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: bocr-dep
+  name: bocr-dep
+  namespace: nebo
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: bocr-dep
+  template:
+    metadata:
+      labels:
+        app: bocr-dep
+    spec:
+      containers:
+        - args:
+            - /start.sh
+          envFrom:
+            - configMapRef:
+                name: env
+                optional: false
+          image: registry.nebo.africa/bocr:latest
+          imagePullPolicy: Always
+          name: bocr-dep
+          resources: {}
