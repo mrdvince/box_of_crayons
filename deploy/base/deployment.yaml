@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: bocr-dep
+  name: bocr-dep
+  namespace: nebo
+spec:
+  selector:
+    matchLabels:
+      app: bocr-dep
+  template:
+    metadata:
+      labels:
+        app: bocr-dep
+    spec:
+      containers:
+        - args:
+            - /start.sh
+          envFrom:
+            - configMapRef:
+                name: env
+                optional: false
+          name: bocr-dep
+          resources: {}
+          volumeMounts:
+            - mountPath: /app/artifacts
+              name: artifacts
+            - mountPath: /app/images
+              name: images
+            - mountPath: /app/runs
+              name: runs
+            - mountPath: /app/wandb
+              name: wandb
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+        - name: regcred
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - hostPath:
+            path: /home/vinc3/data/artifacts
+            type: DirectoryOrCreate
+          name: artifacts
+        - hostPath:
+            path: /home/vinc3/data/images
+            type: DirectoryOrCreate
+          name: images
+        - hostPath:
+            path: /home/vinc3/data/runs
+            type: DirectoryOrCreate
+          name: runs
+        - hostPath:
+            path: /home/vinc3/data/wandb
+            type: DirectoryOrCreate
+          name: wandb
