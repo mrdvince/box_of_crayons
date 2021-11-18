@@ -17,14 +17,15 @@ router = APIRouter()
 
 model_name = "best.pt"
 artifact_dir = "/app/artifacts"
-weights = os.path.join( artifact_dir,f"{os.environ['WANDB_MODEL']+'/'+model_name}")
+weights = os.path.join(artifact_dir, f"{os.environ['WANDB_MODEL']+'/'+model_name}")
 if not os.path.exists(weights):
     wandb.login(key=os.environ["WANDB_KEY"])
     run = wandb.init(project="box_of_crayons", entity="droid")
     artifact = run.use_artifact(
         f"droid/box_of_crayons/{os.environ['WANDB_MODEL']}", type="model"
     )
-    artifact_dir = artifact.download(artifact_dir)
+    artifact_dir = artifact.download(weights)
+
 
 def preload_model(weights, device):
     w = weights[0] if isinstance(weights, list) else weights
