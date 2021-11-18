@@ -10,7 +10,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    command: /start-reload.sh
+    # command: /start-reload.sh
     ports:
       - 8080:80
     restart: always
