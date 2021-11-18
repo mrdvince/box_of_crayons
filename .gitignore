@@ -173,7 +173,7 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
-bocr/app/runs
-bocr/app/images/
+runs/
+images/
 box_of_crayons/
 artifacts/
