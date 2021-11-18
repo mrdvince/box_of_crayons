@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - args:
-            - /start-reload.sh
+            - sh scripts/start-reload.sh
           envFrom:
             - configMapRef:
                 name: env

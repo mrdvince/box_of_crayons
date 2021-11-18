@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - args:
-            - /start.sh
+            - sh scripts/start.sh
           envFrom:
             - configMapRef:
                 name: env
