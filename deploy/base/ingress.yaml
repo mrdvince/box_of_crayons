@@ -1,18 +1,5 @@
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
+apiVersion: extensions/v1beta1
+kind: Ingress
 metadata:
-  name: bocr-http
   namespace: nebo
-spec:
-  entryPoints:
-    - web
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: bocr-https
-  namespace: nebo
-spec:
-  entryPoints:
-    - websecure
+  name:  api-ingress
