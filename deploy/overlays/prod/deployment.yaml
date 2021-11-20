@@ -16,8 +16,8 @@ spec:
         app: bocr-dep
     spec:
       containers:
-        - args:
-            - sh scripts/start.sh
+        - command:
+            - /app/scripts/start.sh
           envFrom:
             - configMapRef:
                 name: env
@@ -25,4 +25,6 @@ spec:
           image: registry.nebo.africa/bocr:latest
           imagePullPolicy: Always
           name: bocr-dep
-          resources: {}
+          resources:
+            limits:
+              memory: 1024Mi

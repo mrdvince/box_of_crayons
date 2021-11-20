@@ -1,33 +1,17 @@
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
+apiVersion: extensions/v1beta1
+kind: Ingress
 metadata:
-  name: bocr-http
+  name:  api-ingress
   namespace: nebo
+  annotations:
+    traefik.ingress.kubernetes.io/router.middlewares: cattle-system-traefik-redirect-scheme@kubernetescrd 
 spec:
-  entryPoints:
-    - web
-  routes:
-    - kind: Rule
-      match: Host(`prod.api.nebo.africa`)
-      services:
-        - name: bocr-svc
-          port: 80
-      middlewares:
-        - name: traefik-redirect-scheme
-          namespace: cattle-system
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: bocr-https
-  namespace: nebo
-spec:
-  entryPoints:
-    - websecure
-  routes:
-    - kind: Rule
-      match: Host(`prod.api.nebo.africa`)
-      services:
-        - name: bocr-svc
-          port: 80
+  rules:
+  - host: prod.api.nebo.africa
+    http:
+      paths:
+      - backend:
+          serviceName: bocr-svc
+          servicePort: 80
+        pathType: ImplementationSpecific
+

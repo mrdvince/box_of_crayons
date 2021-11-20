@@ -15,14 +15,7 @@ spec:
         app: bocr-dep
     spec:
       containers:
-        - args:
-            - /start.sh
-          envFrom:
-            - configMapRef:
-                name: env
-                optional: false
-          name: bocr-dep
-          resources: {}
+        - name: bocr-dep
           volumeMounts:
             - mountPath: /app/artifacts
               name: artifacts
@@ -37,7 +30,6 @@ spec:
         - name: regcred
       restartPolicy: Always
       schedulerName: default-scheduler
-      securityContext: {}
       terminationGracePeriodSeconds: 30
       volumes:
         - hostPath:

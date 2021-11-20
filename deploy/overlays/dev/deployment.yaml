@@ -16,13 +16,15 @@ spec:
         app: bocr-dep
     spec:
       containers:
-        - args:
-            - sh scripts/start-reload.sh
+        - command:
+            - /app/scripts/start-reload.sh
           envFrom:
             - configMapRef:
                 name: env
                 optional: false
           image: registry.nebo.africa/bocr:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           name: bocr-dep
-          resources: {}
+          resources:
+            limits:
+              memory: 1024Mi
