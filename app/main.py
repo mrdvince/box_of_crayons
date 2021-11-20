@@ -32,7 +32,7 @@ Model used is a YoloV5
     """,
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
 )
-app.mount("/runs", StaticFiles(directory="runs", html=True), name="runs")
+app.mount("/app/runs", StaticFiles(directory="runs", html=True), name="runs")
 
 # setup cors
 if settings.BACKEND_CORS_ORIGINS:
