@@ -22,7 +22,7 @@ spec:
             - configMapRef:
                 name: env
                 optional: false
-          image: registry.nebo.africa/bocr:latest
+          image: <container image>
           imagePullPolicy: Always
           name: bocr-dep
           resources:
