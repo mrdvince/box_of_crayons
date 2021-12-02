@@ -7,7 +7,7 @@ metadata:
     traefik.ingress.kubernetes.io/router.middlewares: cattle-system-traefik-redirect-scheme@kubernetescrd 
 spec:
   rules:
-  - host: dev.api.nebo.africa
+  - host: dev.api.<domain name>
     http:
       paths:
       - backend:

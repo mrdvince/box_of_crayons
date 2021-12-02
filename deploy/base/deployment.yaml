@@ -33,18 +33,18 @@ spec:
       terminationGracePeriodSeconds: 30
       volumes:
         - hostPath:
-            path: /home/vinc3/data/artifacts
+            path: /data/artifacts
             type: DirectoryOrCreate
           name: artifacts
         - hostPath:
-            path: /home/vinc3/data/images
+            path: /data/images
             type: DirectoryOrCreate
           name: images
         - hostPath:
-            path: /home/vinc3/data/runs
+            path: /data/runs
             type: DirectoryOrCreate
           name: runs
         - hostPath:
-            path: /home/vinc3/data/wandb
+            path: /data/wandb
             type: DirectoryOrCreate
           name: wandb
