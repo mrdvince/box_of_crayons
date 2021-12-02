@@ -1,6 +1,6 @@
 # ⚠️⚠️⚠️ Notice ⚠️⚠️⚠️⚠️
 
-> Taking an "untill further notice" on this. Probably going to play with other shiny new toys.
+> Taking an "untill further notice" on this. Probably going to play with other shiny toys.
 
 # Nebo
 
@@ -13,7 +13,7 @@ This project aims to combine computer vision and natural language processing to 
 Using object detection, the prediction and localization of plant disease can be easily detected, and further combining this with question answering model feeding questions about the pathogen, the user gets to learn about what's ailing the crops, how to treat them, and a whole range of other agricultural-related questions.
 
 <p align="center">
-<img src="screenshots/apple.png" width="280"/> <img src="screenshots/maize1.png" width="280"/>  <img src="screenshots/tomato4.png" width="280"/>
+<img src="screenshots/apple.png" width="280"/> <img src="screenshots/maize1.png" width="280"/>
 </p>
 
 ## Training
@@ -156,9 +156,9 @@ Sample image showing a single disease classification
 Random image evalution screenshots.
 
 <p align="center">
-<img src="screenshots/apple2.png" width="280"/> <img src="screenshots/apple3.png" width="280"/> <img src="screenshots/apple4.png" width="280"/> 
+<img src="screenshots/apple2.png" width="280"/> <img src="screenshots/apple3.png" width="280"/>
 </p>
 
 <p align="center">
-<img src="screenshots/tomato.png" width="280"/> <img src="screenshots/tomato2.png" width="280"/> <img src="screenshots/tomato3.png" width="280"/>
+<img src="screenshots/tomato.png" width="280"/> <img src="screenshots/tomato2.png" width="280"/>
 </p>
